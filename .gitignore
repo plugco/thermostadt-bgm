@@ -1,0 +1,13 @@
+syntax: glob
+
+*.d
+*.mk
+GNU\ ARM\ v7.2.1\ -\ Default\ -\ BGM121A256V2
+*.axf
+*.map
+*.hex
+*.srec
+*.s37
+*.mot
+.settings/language.settings.xml
+BgBuild_Log.txt

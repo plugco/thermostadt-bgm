@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--Custom BLE GATT-->
+<gatt gatt_caching="true" generic_attribute_service="true" header="gatt_db.h" name="Custom BLE GATT" out="gatt_db.c" prefix="gattdb_">
+  
+  <!--Generic Access-->
+  <service advertise="false" name="Generic Access" requirement="mandatory" sourceId="org.bluetooth.service.generic_access" type="primary" uuid="1800">
+    <informativeText>Abstract: The generic_access service contains generic information about the device. All available Characteristics are readonly. </informativeText>
+    
+    <!--Device Name-->
+    <characteristic id="device_name" name="Device Name" sourceId="org.bluetooth.characteristic.gap.device_name" uuid="2A00">
+      <informativeText/>
+      <value length="19" type="utf-8" variable_length="false">Thermostadt</value>
+      <properties read="true" read_requirement="optional" write="true" write_requirement="optional"/>
+    </characteristic>
+    
+    <!--Appearance-->
+    <characteristic name="Appearance" sourceId="org.bluetooth.characteristic.gap.appearance" uuid="2A01">
+      <informativeText>Abstract: The external appearance of this device. The values are composed of a category (10-bits) and sub-categories (6-bits). </informativeText>
+      <value length="2" type="hex" variable_length="false">0003</value>
+      <properties const="true" const_requirement="optional" read="true" read_requirement="optional"/>
+    </characteristic>
+  </service>
+  
+  <!--Device Information-->
+  <service advertise="false" name="Device Information" requirement="mandatory" sourceId="org.bluetooth.service.device_information" type="primary" uuid="180A">
+    <informativeText>Abstract: The Device Information Service exposes manufacturer and/or vendor information about a device. Summary: This service exposes manufacturer information about a device. The Device Information Service is instantiated as a Primary Service. Only one instance of the Device Information Service is exposed on a device. </informativeText>
+    
+    <!--Manufacturer Name String-->
+    <characteristic name="Manufacturer Name String" sourceId="org.bluetooth.characteristic.manufacturer_name_string" uuid="2A29">
+      <informativeText>Abstract: The value of this characteristic is a UTF-8 string representing the name of the manufacturer of the device. </informativeText>
+      <value length="12" type="utf-8" variable_length="false">Silicon Labs</value>
+      <properties const="true" const_requirement="optional" read="true" read_requirement="optional"/>
+    </characteristic>
+  </service>
+  
+  <!--Health Thermometer-->
+  <service advertise="false" name="Health Thermometer" requirement="mandatory" sourceId="org.bluetooth.service.health_thermometer" type="primary" uuid="1809">
+    <informativeText>Abstract: The Health Thermometer service exposes temperature and other data from a thermometer intended for healthcare and fitness applications. Summary: The Health Thermometer service is instantiated as a Primary Service. There are one or more instantiations of the Health Thermometer service per device claiming conformance with this specification. </informativeText>
+    
+    <!--Temperature Measurement-->
+    <characteristic id="temperature_measurement" name="Temperature Measurement" sourceId="org.bluetooth.characteristic.temperature_measurement" uuid="2A1C">
+      <informativeText/>
+      <value length="5" type="utf-8" variable_length="false"/>
+      <properties encrypted_read="true" encrypted_read_requirement="optional" indicate="true" indicate_requirement="optional"/>
+    </characteristic>
+    
+    <!--Temperature Type-->
+    <characteristic id="temperature_type" name="Temperature Type" sourceId="org.bluetooth.characteristic.temperature_type" uuid="2A1D">
+      <informativeText>Abstract:  The Temperature Type characteristic is an enumeration that indicates where the temperature was measured.  Summary:  These Temperature Type values correspond to the Temperature Type descriptions used in ISO/IEEE 11073-10408-2008.  </informativeText>
+      <value length="1" type="hex" variable_length="false">0x02</value>
+      <properties read="true" read_requirement="optional"/>
+    </characteristic>
+  </service>
+  
+  <!--Thermostadt-->
+  <service advertise="true" id="" name="Thermostadt" requirement="mandatory" sourceId="custom.type" type="primary" uuid="3a23df09-3de0-412c-be37-508a50d62b41">
+    <informativeText>Custom service</informativeText>
+    
+    <!--Humidity-->
+    <characteristic id="thermostadt_humidity" name="Humidity" sourceId="custom.type" uuid="e0374566-dee4-4b26-853e-91b3058bcf95">
+      <informativeText>Custom characteristic</informativeText>
+      <value length="4" type="hex" variable_length="false">0x00</value>
+      <properties bonded_read="true" bonded_read_requirement="optional"/>
+    </characteristic>
+    
+    <!--Humidity High Hyst-->
+    <characteristic id="thermostadt_humidity_hyst_high" name="Humidity High Hyst" sourceId="custom.type" uuid="7717b2af-4d05-4665-9f90-82d7f3a7f75a">
+      <informativeText>Custom characteristic</informativeText>
+      <value length="4" type="hex" variable_length="false">0x204E0000</value>
+      <properties bonded_read="true" bonded_read_requirement="optional" bonded_write="true" bonded_write_requirement="optional"/>
+    </characteristic>
+    
+    <!--Humidity Setpoint-->
+    <characteristic id="thermostadt_humidity_set" name="Humidity Setpoint" sourceId="custom.type" uuid="d6776daf-0340-4a0b-b188-7f2193193ee8">
+      <informativeText>Custom characteristic</informativeText>
+      <value length="4" type="hex" variable_length="false">0x50C30000</value>
+      <properties bonded_read="true" bonded_read_requirement="optional" bonded_write="true" bonded_write_requirement="optional"/>
+    </characteristic>
+    
+    <!--Humidity Low Hyst-->
+    <characteristic id="thermostadt_humidity_hyst_low" name="Humidity Low Hyst" sourceId="custom.type" uuid="9dce55ff-500b-49fe-b12c-87db2b44c5fc">
+      <informativeText>Custom characteristic</informativeText>
+      <value length="4" type="hex" variable_length="false">0x204E0000</value>
+      <properties bonded_read="true" bonded_read_requirement="optional" bonded_write="true" bonded_write_requirement="optional"/>
+    </characteristic>
+    
+    <!--Outputs-->
+    <characteristic id="thermostadt_outputs" name="Outputs" sourceId="custom.type" uuid="6a8c367a-9478-45b7-961f-ad610d3544eb">
+      <informativeText>Custom characteristic</informativeText>
+      <value length="1" type="hex" variable_length="false">0x00</value>
+      <properties bonded_read="true" bonded_read_requirement="optional"/>
+    </characteristic>
+    
+    <!--Temperature-->
+    <characteristic id="thermostadt_temperature" name="Temperature" sourceId="custom.type" uuid="25f0dfa0-d54e-4438-adc1-5c6c06120671">
+      <informativeText>Custom characteristic</informativeText>
+      <value length="4" type="hex" variable_length="false">0x00</value>
+      <properties bonded_read="true" bonded_read_requirement="optional"/>
+    </characteristic>
+    
+    <!--Temperature High Hyst-->
+    <characteristic id="thermostadt_temperature_hyst_high" name="Temperature High Hyst" sourceId="custom.type" uuid="b3194ed5-1423-4536-ad00-06f04d648654">
+      <informativeText>Custom characteristic</informativeText>
+      <value length="4" type="hex" variable_length="false">0xE8030000</value>
+      <properties bonded_read="true" bonded_read_requirement="optional" bonded_write="true" bonded_write_requirement="optional"/>
+    </characteristic>
+    
+    <!--Temperature Setpoint-->
+    <characteristic id="thermostadt_temperature_set" name="Temperature Setpoint" sourceId="custom.type" uuid="56a7e7ea-3a87-4e9a-be04-461548d1849b">
+      <informativeText>Custom characteristic</informativeText>
+      <value length="4" type="hex" variable_length="false">0xA8610000</value>
+      <properties bonded_read="true" bonded_read_requirement="optional" bonded_write="true" bonded_write_requirement="optional"/>
+    </characteristic>
+    
+    <!--Temperature Low Hyst-->
+    <characteristic id="thermostadt_temperature_hyst_low" name="Temperature Low Hyst" sourceId="custom.type" uuid="80e72425-6756-4ad8-9c8f-9bdc24668a89">
+      <informativeText>Custom characteristic</informativeText>
+      <value length="4" type="hex" variable_length="false">0xE8030000</value>
+      <properties bonded_read="true" bonded_read_requirement="optional" bonded_write="true" bonded_write_requirement="optional"/>
+    </characteristic>
+  </service>
+  
+  <!--Silicon Labs OTA-->
+  <service advertise="false" name="Silicon Labs OTA" requirement="mandatory" sourceId="com.silabs.service.ota" type="primary" uuid="1D14D6EE-FD63-4FA1-BFA4-8F47B42119F0">
+    <informativeText>Abstract: The Silicon Labs OTA Service enables over-the-air firmware update of the device. </informativeText>
+    
+    <!--Silicon Labs OTA Control-->
+    <characteristic id="ota_control" name="Silicon Labs OTA Control" sourceId="com.silabs.characteristic.ota_control" uuid="F7BF3564-FB6D-4E53-88A4-5E37E0326063">
+      <informativeText>Abstract: Silicon Labs OTA Control. </informativeText>
+      <value length="1" type="user" variable_length="false"/>
+      <properties write="true" write_requirement="optional"/>
+    </characteristic>
+  </service>
+</gatt>
