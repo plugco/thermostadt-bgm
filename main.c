@@ -136,13 +136,8 @@ void pinOutSetValue(GPIO_Port_TypeDef port, unsigned int pin, uint32_t value)
  */
 void temperatureMeasure()
 {
-  uint8_t htmTempBuffer[5]; /* Stores the temperature data in the Health Thermometer (HTM) format. */
-  uint8_t flags = 0x00;   /* HTM flags set as 0 for Celsius, no time stamp and no temperature type. */
-  int32_t tempData;     /* Stores the Temperature data read from the RHT sensor. */
-  uint32_t rhData = 0;    /* Dummy needed for storing Relative Humidity data. */
-  uint32_t temperature;   /* Stores the temperature data read from the sensor in the correct format */
-  uint8_t *p = htmTempBuffer; /* Pointer to HTM temperature buffer needed for converting values to bitstream. */
-  static int32_t DummyValue = 0l; /* This dummy value can substitute the temperature sensor value if the sensor is N/A. */
+  int32_t tempData;
+  uint32_t rhData = 0;
   char s[32];
 
   const uint32_t humidity_high_hyst = readUint32(gattdb_thermostadt_humidity_hyst_high);
@@ -152,18 +147,13 @@ void temperatureMeasure()
   const int32_t temperature_set = readUint32(gattdb_thermostadt_temperature_set);
   const int32_t temperature_low_hyst = readUint32(gattdb_thermostadt_temperature_hyst_low);
 
-  /* Convert flags to bitstream and append them in the HTM temperature data buffer (htmTempBuffer) */
-  UINT8_TO_BITSTREAM(p, flags);
-
 #ifdef FEATURE_I2C_SENSOR
   /* Sensor relative humidity and temperature measurement returns 0 on success, nonzero otherwise */
   if (Si7013_MeasureRHAndTemp(I2C0, SI7021_ADDR, &rhData, &tempData) != 0)
 #endif
   {
-    /* Use the dummy value and go between 20 and 40 if the sensor read failed.
-     * The ramp-up value will be seen in the characteristic in the receiving end. */
-    tempData = DummyValue + 20000l;
-    DummyValue = (DummyValue + 1000l) % 21000l;
+    tempData = -100000;
+    rhData = 0;
   }
 
   if (tempData <= temperature_set - temperature_low_hyst)
@@ -221,18 +211,6 @@ void temperatureMeasure()
 
   gecko_cmd_gatt_server_write_attribute_value(gattdb_thermostadt_temperature, 0, 4, (uint8_t *) &tempData);
   gecko_cmd_gatt_server_write_attribute_value(gattdb_thermostadt_humidity, 0, 4, (uint8_t *) &rhData);
-
-  /* Convert sensor data to correct temperature format */
-  temperature = FLT_TO_UINT32(tempData, -3);
-  /* Convert temperature to bitstream and place it in the HTM temperature data buffer (htmTempBuffer) */
-  UINT32_TO_BITSTREAM(p, temperature);
-
-  /* Send indication of the temperature in htmTempBuffer to all "listening" clients.
-   * This enables the Health Thermometer in the Blue Gecko app to display the temperature.
-   *  0xFF as connection ID will send indications to all connections. */
-  gecko_cmd_gatt_server_write_attribute_value(gattdb_temperature_measurement, 0, 5, htmTempBuffer);
-  gecko_cmd_gatt_server_send_characteristic_notification(
-    0xFF, gattdb_temperature_measurement, 5, htmTempBuffer);
 }
 
 /**

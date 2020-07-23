@@ -17,17 +17,15 @@ extern const struct bg_gattdb_def bg_gattdb_data;
 #define gattdb_database_hash                    6
 #define gattdb_client_support_features          8
 #define gattdb_device_name                     11
-#define gattdb_temperature_measurement         19
-#define gattdb_temperature_type                22
-#define gattdb_thermostadt_humidity            25
-#define gattdb_thermostadt_humidity_hyst_high         27
-#define gattdb_thermostadt_humidity_set         29
-#define gattdb_thermostadt_humidity_hyst_low         31
-#define gattdb_thermostadt_outputs             33
-#define gattdb_thermostadt_temperature         35
-#define gattdb_thermostadt_temperature_hyst_high         37
-#define gattdb_thermostadt_temperature_set         39
-#define gattdb_thermostadt_temperature_hyst_low         41
-#define gattdb_ota_control                     44
+#define gattdb_thermostadt_humidity            19
+#define gattdb_thermostadt_humidity_hyst_high         21
+#define gattdb_thermostadt_humidity_set         23
+#define gattdb_thermostadt_humidity_hyst_low         25
+#define gattdb_thermostadt_outputs             27
+#define gattdb_thermostadt_temperature         29
+#define gattdb_thermostadt_temperature_hyst_high         31
+#define gattdb_thermostadt_temperature_set         33
+#define gattdb_thermostadt_temperature_hyst_low         35
+#define gattdb_ota_control                     38
 
 #endif
