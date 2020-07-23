@@ -254,16 +254,16 @@ int main(void)
 
   GPIO_PinOutClear(gpioPortF, 4);
   GPIO_PinOutClear(gpioPortF, 5);
-  GPIO_PinOutClear(gpioPortF, 6);
-  GPIO_PinOutClear(gpioPortF, 7);
-  GPIO_PinModeSet(gpioPortF, 4, gpioModePushPull, 1);
-  GPIO_PinModeSet(gpioPortF, 5, gpioModePushPull, 1);
-  GPIO_PinModeSet(gpioPortF, 6, gpioModePushPull, 1);
-  GPIO_PinModeSet(gpioPortF, 7, gpioModePushPull, 1);
-  GPIO_PinOutClear(gpioPortF, 4);
-  GPIO_PinOutClear(gpioPortF, 5);
-  GPIO_PinOutClear(gpioPortF, 6);
-  GPIO_PinOutClear(gpioPortF, 7);
+  GPIO_PinOutClear(gpioPortD, 11);
+  GPIO_PinOutClear(gpioPortD, 12);
+  GPIO_PinModeSet(gpioPortF, 4, gpioModePushPull, 0);
+  GPIO_PinModeSet(gpioPortF, 5, gpioModePushPull, 0);
+  GPIO_PinModeSet(gpioPortD, 11, gpioModePushPull, 0);
+  GPIO_PinModeSet(gpioPortD, 12, gpioModePushPull, 0);
+
+  GPIO_PinOutSet(gpioPortF, 6);
+  GPIO_PinModeSet(gpioPortF, 6, gpioModeInputPull, 1);
+  GPIO_PinOutSet(gpioPortF, 6);
 
   #ifdef FEATURE_I2C_SENSOR
   // Initialize the Temperature Sensor
@@ -295,10 +295,13 @@ int main(void)
          * the timer handle and the 3rd parameter '0' tells the timer to repeat continuously until
          * stopped manually.*/
         gecko_cmd_hardware_set_soft_timer(32768, 0, 0);
-//        gecko_cmd_sm_delete_bondings();
 
         gecko_cmd_sm_configure(2, 3);
         gecko_cmd_sm_set_bondable_mode(1);
+        if (!GPIO_PinInGet(gpioPortF, 6))
+        {
+        	gecko_cmd_sm_delete_bondings();
+        }
         break;
 
       /* This event is generated when a connected client has either
@@ -330,6 +333,7 @@ int main(void)
       case gecko_evt_hardware_soft_timer_id:
         /* Measure the temperature as defined in the function temperatureMeasure() */
         temperatureMeasure();
+
         break;
 
       case gecko_evt_le_connection_closed_id:
